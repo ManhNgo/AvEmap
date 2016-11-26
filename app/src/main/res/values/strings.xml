@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">AvEmap</string>
+    <string name="search">Search</string>
+    <string name="findlocation">Find Location</string>
+    <string name="comment">Comment</string>
+    <string name="choosetype">Choose Type</string>
+    <string name="shownotifies">Show Notifes</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="guide">Guide</string>
+    <string name="contact">Contact Us</string>
+    <string name="history">History</string>
+    <string name="ket_xe">Kẹt Xe</string>
+    <string name="tai_nan_giao_thong">Tai nạn giao thông</string>
+    <string name="co_csgt">Có CSGT</string>
+    <string name="ngap_lut">Ngập lụt</string>
+    <string name="khac">Khác</string>
+    <string name="details">Details</string>
+    <string name="signin">Sign in</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_tab__detail">Tab_Detail</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_tabs__detail">Tabs_Detail</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="showmap">Show map</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ket_xe"
+        android:orderInCategory="100"
+        android:title="@string/ket_xe"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/co_csgt"
+        android:orderInCategory="100"
+        android:title="@string/co_csgt"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/tai_nan_giao_thong"
+        android:orderInCategory="100"
+        android:title="@string/tai_nan_giao_thong"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/ngap_lut"
+        android:orderInCategory="100"
+        android:title="@string/ngap_lut"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/khac"
+        android:orderInCategory="100"
+        android:title="@string/khac"
+        app:showAsAction="never" />
+</menu>
