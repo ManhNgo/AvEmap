@@ -1,36 +1,46 @@
 package com.example.manhngo.avemap;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-
-import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.manhngo.avemap.Fragments.CallBack.MainCallbacks;
+import com.example.manhngo.avemap.Fragments.ControlMapFragment;
+import com.example.manhngo.avemap.Fragments.MMapFragment;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    ProgressDialog progressDialog;
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MainCallbacks, OnMapReadyCallback {
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private SupportMapFragment supportMapFragment;
+
+
+    FragmentTransaction fragmentTransaction;
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    ControlMapFragment controlMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +51,24 @@ public class MainActivity extends AppCompatActivity
 
         //Map_Fragment
 
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        controlMapFragment = ControlMapFragment.newInstance("first-Controll");
+        fragmentTransaction.replace(R.id.controll_map, controlMapFragment);
+        //fragmentTransaction.commit();
+        if(controlMapFragment == null){
+            Toast.makeText(this, "Null cmnr", Toast.LENGTH_SHORT).show();
+        }
 
-      /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
+
+        //supportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        supportMapFragment = SupportMapFragment.newInstance();
+        fragmentManager.beginTransaction().replace(R.id.map, supportMapFragment).commit();
+
+        supportMapFragment.getMapAsync(this);
+        //fragmentTransaction.commit();
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,55 +83,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-/*    private void controlMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-*//*        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setTitle("Thông báo");
-        progressDialog.setMessage("Đang tải Map, vui lòng chờ...!");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();*//*
-    }*/
-
-/*
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-        */
-/*mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                progressDialog.dismiss();
-                *//*
-*/
-/*LatLng hcmus = new LatLng(10.762963, 106.682394);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15));
-                mMap.addMarker(new MarkerOptions()
-                        .title("Đại học Khoa học tự nhiên")
-                        .position(hcmus));*//*
-*/
-/*
-
-            }
-        });*//*
-
-
-    }
-*/
 
     @Override
     public void onBackPressed() {
@@ -168,7 +137,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        FragmentManager fm = getSupportFragmentManager();
         // Handle nav_navigation view item clicks here.
         int id = item.getItemId();
 
@@ -186,7 +154,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.navShowMap:
                 Toast.makeText(this, "Show map location", Toast.LENGTH_SHORT).show();
-                fm.beginTransaction().replace(R.id.map, new Map_Fragment()).commit();
+                fragmentManager.beginTransaction().replace(R.id.map, new MMapFragment()).commit();
                 break;
             case R.id.nav_shownotifes:
                 Toast.makeText(this, "Show notifies", Toast.LENGTH_SHORT).show();
@@ -244,4 +212,31 @@ public class MainActivity extends AppCompatActivity
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
+
+    @Override
+    public void onMsgFromFragToMain(String sender, String receiver, String strValue)  {
+        // show message arriving to MainActivity
+        //Fragment chứa các button gửi vị trí hiện sau khi thao tác với các button cho supportMapFragment chứa ListView
+        if (sender.equals("Controll-Frag")) {
+            if(receiver.equals("Show-Traffic")){
+                if(strValue.equals("Turn-On")){
+                    try {
+                        // forward blue-data to redFragment using its callback method
+                        boolean a = true;
+                        mMapFragment.onMsgFromMainToFragment_Traffic(a);
+                    } catch (Exception e) {
+                        Log.e("ERROR", "onStrFromFragToMain " + e.getMessage());
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
+
 }

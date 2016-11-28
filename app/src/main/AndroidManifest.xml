@@ -44,8 +44,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Map_Fragment"
-            android:label="@string/title_activity_map" />
+            android:name=".MMapFragment"/>
+
         <activity
             android:name=".TabsDetailActivity"
             android:label="@string/title_activity_tabs__detail"
